@@ -33,6 +33,19 @@ The analysis answers the following questions:
 
 ---
 
+## Key Findings
+
+The analysis identified several important patterns:
+
+- Revenue and order volume increased during the main observation period.
+- A small number of product categories generated a significant share of total revenue.
+- Most customers placed only one order.
+- Delivery delays were associated with lower customer review scores.
+- Customer activity was concentrated in a few Brazilian states.
+- Customer purchasing behavior followed a classic Pareto distribution, where a relatively small share of customers generated a large portion of revenue.
+
+---
+
 ## Tools and Technologies
 
 - Python
