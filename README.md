@@ -1,26 +1,47 @@
-# E-Commerce Marketplace Analytics
+# 📊 E-Commerce Marketplace Analytics
 
-## Project Overview
+[![Python](https://img.shields.io/badge/Python-3.11%2B-blue)](https://www.python.org/)
+[![SQLite](https://img.shields.io/badge/Database-SQLite-lightgrey)](https://www.sqlite.org/)
+[![Streamlit](https://img.shields.io/badge/Dashboard-Streamlit-red)](https://streamlit.io/)
+[![License](https://img.shields.io/badge/License-MIT-green)](LICENSE)
 
-This is a junior data analytics portfolio project based on the Brazilian E-Commerce Public Dataset by Olist.
+A junior data analytics portfolio project based on the **Brazilian E-Commerce Public Dataset by Olist**, covering the full analytics workflow — from raw CSV data to an interactive dashboard.
 
-The project demonstrates a complete beginner-friendly analytics workflow:
-
-- data cleaning and validation with Python
-- database creation with SQLite
-- SQL analysis
-- exploratory data analysis
-- data visualization
-- business insights
-- interactive dashboard development with Streamlit
-
-The main goal of the project is to analyze marketplace sales, customers, product categories, delivery performance, and customer reviews.
+> 📌 Analyzes marketplace sales, customers, product categories, delivery performance, and customer reviews for a Brazilian e-commerce marketplace (2016–2018).
 
 ---
 
-## Business Questions
+## 🖼️ Dashboard Preview
 
-The analysis answers the following questions:
+<p align="center">
+  <img src="assets/1.png" alt="Dashboard" width="900"/>
+</p>
+<p align="center">
+  <img src="assets/2.png" alt="Dashboard" width="900"/>
+</p>
+<p align="center">
+  <img src="assets/3.png" alt="Dashboard" width="900"/>
+</p>
+<p align="center">
+  <img src="assets/4.png" alt="Dashboard" width="900"/>
+</p>
+---
+
+## 🎯 Project Overview
+
+This project demonstrates a complete, beginner-friendly analytics workflow:
+
+- Data cleaning and validation with **Python**
+- Database creation with **SQLite**
+- Business analysis with **SQL** (joins, CTEs, window functions)
+- Exploratory data analysis (**EDA**)
+- Data visualization
+- Business insights and reporting
+- Interactive dashboard development with **Streamlit**
+
+---
+
+## ❓ Business Questions
 
 - How did revenue and order volume change over time?
 - Which product categories generated the most revenue?
@@ -33,41 +54,63 @@ The analysis answers the following questions:
 
 ---
 
-## Key Findings
-
-The analysis identified several important patterns:
+## 💡 Key Findings
 
 - Revenue and order volume increased during the main observation period.
 - A small number of product categories generated a significant share of total revenue.
 - Most customers placed only one order.
 - Delivery delays were associated with lower customer review scores.
 - Customer activity was concentrated in a few Brazilian states.
-- Customer purchasing behavior followed a classic Pareto distribution, where a relatively small share of customers generated a large portion of revenue.
+- Customer purchasing behavior followed a classic **Pareto distribution** — a relatively small share of customers generated a large portion of revenue.
 
 ---
 
-## Tools and Technologies
+## 🧪 Sample SQL: Monthly Revenue with Running Total
 
-- Python
-- pandas
-- NumPy
-- matplotlib
-- Plotly
-- SQL
-- SQLite
-- Jupyter Notebook
-- Streamlit
-- Git and GitHub
+A short example of the SQL used in the project (window functions + CTE):
+
+```sql
+WITH monthly_revenue AS (
+    SELECT
+        strftime('%Y-%m', o.order_purchase_timestamp) AS order_month,
+        SUM(oi.price) AS revenue
+    FROM orders o
+    JOIN order_items oi ON o.order_id = oi.order_id
+    WHERE o.order_status = 'delivered'
+    GROUP BY order_month
+)
+SELECT
+    order_month,
+    revenue,
+    SUM(revenue) OVER (ORDER BY order_month) AS running_total_revenue,
+    RANK() OVER (ORDER BY revenue DESC) AS revenue_rank
+FROM monthly_revenue
+ORDER BY order_month;
+```
+
+More queries (joins, CASE WHEN, LAG, reusable views) are in [`sql/`](sql/).
 
 ---
 
-## Dataset
+## 🛠️ Tools and Technologies
 
-The project uses the Brazilian E-Commerce Public Dataset by Olist.
+| Category | Tools |
+|---|---|
+| Language | Python |
+| Data processing | pandas, NumPy |
+| Visualization | matplotlib, Plotly |
+| Database | SQL, SQLite |
+| Notebooks | Jupyter Notebook |
+| Dashboard | Streamlit |
+| Version control | Git, GitHub |
 
-The dataset contains anonymized information about marketplace orders placed in Brazil between 2016 and 2018.
+---
 
-Main datasets used:
+## 📂 Dataset
+
+The project uses the **Brazilian E-Commerce Public Dataset by Olist**, containing anonymized marketplace orders placed in Brazil between 2016 and 2018.
+
+Main tables used:
 
 - orders
 - order items
@@ -76,25 +119,15 @@ Main datasets used:
 - product category translations
 - order reviews
 
-The original CSV files are not included in this repository because of their size. They can be downloaded from Kaggle and placed in:
+> The original CSV files are not included in this repo due to size. Download them from Kaggle and place them in `data/raw/`.
 
-```text
-data/raw/
-```
-
-The repository includes the prepared SQLite database used by the Streamlit dashboard:
-
-```text
-database/ecommerce.db
-```
-
-This allows the dashboard to run without rebuilding the database first.
+A ready-to-use SQLite database is already included at `database/ecommerce.db`, so the dashboard runs without rebuilding anything.
 
 ---
 
-## Project Structure
+## 📁 Project Structure
 
-```text
+```
 ecommerce-marketplace-analytics/
 ├── dashboard/
 │   └── app.py
@@ -130,9 +163,7 @@ ecommerce-marketplace-analytics/
 
 ---
 
-## Analysis Workflow
-
-The project follows these main steps:
+## 🔄 Analysis Workflow
 
 1. Load and inspect the raw CSV files.
 2. Clean missing values and duplicate records.
@@ -148,265 +179,119 @@ The project follows these main steps:
 
 ---
 
-## SQL Skills Demonstrated
+## 🧮 SQL Skills Demonstrated
 
-The SQL part of the project includes:
+`SELECT` · `WHERE` · `GROUP BY` · `HAVING` · `ORDER BY` · inner & left joins · aggregations · `CASE WHEN` · common table expressions · window functions (`ROW_NUMBER`, `RANK`, `LAG`) · running totals · reusable SQL views
 
-- SELECT
-- WHERE
-- GROUP BY
-- HAVING
-- ORDER BY
-- inner and left joins
-- aggregations
-- CASE WHEN
-- common table expressions
-- window functions
-- ROW_NUMBER
-- RANK
-- LAG
-- running totals
-- reusable SQL views
+## 🐍 Python Skills Demonstrated
+
+Loading CSVs with pandas · inspecting datasets · cleaning missing values · removing duplicates · working with date/time columns · merging DataFrames · grouping and aggregating · calculating business metrics · creating visualizations · exporting processed data and reports
 
 ---
 
-## Python Skills Demonstrated
+## 🔍 Key Analysis Areas
 
-The Python notebooks demonstrate:
-
-- loading CSV files with pandas
-- inspecting datasets
-- cleaning missing values
-- removing duplicates
-- working with date and time columns
-- merging DataFrames
-- grouping and aggregating data
-- calculating business metrics
-- creating visualizations
-- exporting processed data and reports
+**Sales** — monthly revenue, order volume, average order value, revenue trends
+**Customers** — unique & repeat customers, revenue distribution, segmentation
+**Products & Categories** — top categories/products by revenue, performance comparisons
+**Geography** — revenue and orders by state, delivery time by state
+**Delivery & Reviews** — delivery time distribution, late delivery rate, review scores vs. delivery outcome
 
 ---
 
-## Key Analysis Areas
+## 📊 Interactive Dashboard
 
-The project focuses on five main areas:
+Located at `dashboard/app.py`, built on `database/ecommerce.db`.
 
-**Sales**
-- monthly revenue
-- monthly order volume
-- average order value
-- revenue trends
+**Filters:** month · customer state · product category
 
-**Customers**
-- unique customers
-- repeat customers
-- customer revenue distribution
-- customer segmentation
-
-**Products and Categories**
-- top categories by revenue
-- top products by revenue
-- product performance comparisons
-
-**Geography**
-- revenue by state
-- orders by state
-- delivery time by state
-
-**Delivery and Reviews**
-- delivery time distribution
-- late delivery rate
-- review score distribution
-- relationship between delivery performance and review scores
+**Displays:** revenue · number of orders · average order value · unique customers · sales trends · customer analysis · category performance · regional performance · delivery metrics · review metrics
 
 ---
 
-## Interactive Dashboard
-
-The project includes a Streamlit dashboard located at:
-
-```text
-dashboard/app.py
-```
-
-The dashboard uses:
-
-```text
-database/ecommerce.db
-```
-
-It includes interactive filters for:
-
-- month
-- customer state
-- product category
-
-The dashboard displays:
-
-- revenue
-- number of orders
-- average order value
-- unique customers
-- sales trends
-- customer analysis
-- category performance
-- regional performance
-- delivery metrics
-- review metrics
-
----
-
-## How to Run the Project
+## 🚀 How to Run the Project
 
 **1. Clone the repository**
-
 ```bash
 git clone https://github.com/amangeldievaalinaa-cmd/ecommerce-marketplace-analytics.git
-```
-
-**2. Open the project folder**
-
-```bash
 cd ecommerce-marketplace-analytics
 ```
 
-**3. Create a virtual environment**
-
+**2. Create and activate a virtual environment**
 ```bash
 python3 -m venv .venv
+source .venv/bin/activate     # macOS/Linux
+.venv\Scripts\activate        # Windows
 ```
 
-**4. Activate the virtual environment**
-
-macOS or Linux:
-
-```bash
-source .venv/bin/activate
-```
-
-Windows:
-
-```bash
-.venv\Scripts\activate
-```
-
-**5. Install the required libraries**
-
+**3. Install dependencies**
 ```bash
 pip install -r requirements.txt
 ```
 
----
+**4. Run the dashboard**
 
-## Run the Streamlit Dashboard
-
-Because the prepared SQLite database is included in the repository, the dashboard can be started directly:
-
+Since the prepared SQLite database is already included, you can start the dashboard directly:
 ```bash
 streamlit run dashboard/app.py
 ```
+It will open at `http://localhost:8501`.
 
-The application will normally open at:
-
-```text
-http://localhost:8501
-```
-
-For better package compatibility, Python 3.11 or Python 3.12 is recommended.
+> Python 3.11 or 3.12 is recommended for best package compatibility.
 
 ---
 
-## Run the Full Analytics Pipeline
+## 🔁 Run the Full Analytics Pipeline
 
-To rebuild the project from the original CSV files:
+To rebuild everything from the original CSV files:
 
-1. Download the Olist dataset.
-2. Place the required files in:
+1. Download the [Olist dataset](https://www.kaggle.com/datasets/olistbr/brazilian-ecommerce) and place it in `data/raw/`.
+2. Start Jupyter: `jupyter notebook`
+3. Run the notebooks in order:
+   ```
+   01_data_cleaning.ipynb
+   02_sqlite_database_setup.ipynb
+   03_sql_analysis.ipynb
+   04_python_eda.ipynb
+   ```
 
-```text
-data/raw/
-```
-
-3. Start Jupyter Notebook:
-
-```bash
-jupyter notebook
-```
-
-4. Run the notebooks in this order:
-
-```text
-01_data_cleaning.ipynb
-02_sqlite_database_setup.ipynb
-03_sql_analysis.ipynb
-04_python_eda.ipynb
-```
-
-The notebooks create:
-
-- cleaned datasets
-- the SQLite database
-- SQL analysis results
-- visualizations
-- analysis reports
+This regenerates the cleaned datasets, the SQLite database, SQL analysis results, visualizations, and reports.
 
 ---
 
-## Visualizations
+## 📈 Visualizations
 
-The project includes charts covering:
-
-- monthly revenue trends
-- monthly order trends
-- order value distribution
-- customer revenue distribution
-- repeat and one-time customers
-- revenue by category
-- top products
-- revenue and orders by state
-- delivery time
-- late delivery rate
-- review score distribution
-- review scores by delivery outcome
-
-The generated charts are stored in:
-
-```text
-visuals/
-```
+Charts covering monthly revenue/order trends, order value distribution, customer revenue distribution, repeat vs. one-time customers, revenue by category, top products, revenue/orders by state, delivery time, late delivery rate, and review scores — all stored in [`visuals/`](visuals/).
 
 ---
 
-## Limitations
+## ⚠️ Limitations
 
-- The dataset covers historical marketplace activity from 2016 to 2018.
-- Product cost data is not available, so the project analyzes revenue rather than profit.
-- The project does not include causal analysis.
-- Seller, payment, and geolocation datasets are outside the main project scope.
-- The results describe one marketplace and should not be generalized to all e-commerce businesses.
+- Dataset covers historical activity from 2016–2018 only.
+- No product cost data available → analysis focuses on revenue, not profit.
+- No causal analysis performed.
+- Seller, payment, and geolocation datasets are outside the current scope.
+- Findings describe one marketplace and shouldn't be generalized to all e-commerce businesses.
 
 ---
 
-## Possible Improvements
+## 🔮 Possible Improvements
 
-Future improvements may include:
-
-- seller performance analysis
-- payment method analysis
-- geographic maps
-- customer cohort analysis
+- Seller performance analysis
+- Payment method analysis
+- Geographic maps
+- Customer cohort analysis
 - RFM customer segmentation
 - Power BI or Looker Studio dashboard
 - Streamlit Community Cloud deployment
-- automated data pipeline
-- additional delivery and review analysis
+- Automated data pipeline
+- Additional delivery and review analysis
 
 ---
 
-## Author
+## 👤 Author
 
 **Alina Amangeldiyeva**
+Junior Data Analyst — portfolio project
 
-Junior Data Analyst portfolio project.
-
-GitHub: [amangeldievaalinaa-cmd](https://github.com/amangeldievaalinaa-cmd)
+GitHub: [@amangeldievaalinaa-cmd](https://github.com/amangeldievaalinaa-cmd)
